@@ -1,0 +1,71 @@
+---
+- name: update and upgrade apt packages
+  become: true
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+
+- name: copy boot/config.txt
+  become: yes
+  copy:
+    src: files/boot-config.txt
+    dest: /boot/config.txt
+
+- name: ensure /etc/ctt exists
+  become: yes
+  file:
+    path: /etc/ctt
+    state: directory
+    mode: '0755'
+
+- name: create station image file
+  become: yes
+  shell: date -I > /etc/ctt/station-image
+
+- name: create station software file
+  become: yes
+  shell: date -I > /etc/ctt/station-software
+
+- name: copy station hosts on boot
+  become: yes
+  template:
+    src: files/hosts
+    dest: /etc/hosts
+
+- name: copy hostname
+  become: yes
+  copy:
+    content: "{{hostname}}"
+    dest: /etc/hostname
+
+- name: install system packages
+  become: true
+  apt: 
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+    - git
+    - build-essential
+    - minicom # for serial debugging
+    - raspi-gpio # GPIO command line utility
+    - python-smbus
+    - i2c-tools
+    - libudev-dev
+    - cmake
+    - python-pip
+    - python-dev
+    - python-wheel
+    - software-properties-common
+    - exfat-fuse
+    - exfat-utils
+    - avrdude
+    - python3-venv
+    - bmon
+
+- name: enable i2c access
+  become: true
+  lineinfile:
+    path: /etc/modules
+    line: i2c-dev

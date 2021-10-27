@@ -1,0 +1,3 @@
+---
+software_dir: /home/pi/ctt
+dependency_dir: "{{ software_dir }}/dependencies"

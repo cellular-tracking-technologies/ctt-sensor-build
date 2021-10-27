@@ -1,0 +1,5 @@
+---
+HW_CLOCK_MODEL: ds3231
+PPS_GPIO_PIN: 13
+software_dir: /home/pi/ctt
+dependency_dir: "{{ software_dir }}/dependencies"

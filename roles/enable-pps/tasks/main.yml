@@ -1,0 +1,7 @@
+---
+- name: enusure pps-gpio module is loaded at boot
+  become: true
+  lineinfile:
+    backup: true
+    path: /etc/modules
+    line: pps-gpio

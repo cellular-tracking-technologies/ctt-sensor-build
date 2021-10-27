@@ -1,0 +1,11 @@
+[Unit]
+Description=Station ID
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/etc/ctt/scripts/save-station-id.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target 

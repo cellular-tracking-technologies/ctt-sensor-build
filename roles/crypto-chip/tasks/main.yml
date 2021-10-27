@@ -1,0 +1,56 @@
+---
+- name: install dependencies
+  become: true
+  apt: 
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+    - libgcrypt-dev
+    - automake
+    - autoconf
+    - libtool
+    - flex
+    - bison
+    - texinfo
+
+- name: install hashlet for crypto chip
+  become: yes
+  become_user: pi
+  git: 
+    repo: https://github.com/cryptotronix/hashlet.git
+    dest: /tmp/hashlet
+    version: 1.1.0
+
+- name: build configure hashlet
+  become: yes
+  become_user: pi
+  command:
+    cmd: autoreconf -i
+    chdir: /tmp/hashlet
+
+- name: run configure for hashlet
+  become: yes
+  become_user: pi
+  command:
+    cmd: ./configure
+    chdir: /tmp/hashlet
+
+- name: make hashlet
+  become: yes
+  become_user: pi
+  command:
+    cmd: make
+    chdir: /tmp/hashlet
+
+- name: make install hashlet
+  become: yes
+  command:
+    cmd: make install
+    chdir: /tmp/hashlet
+
+- name: clean hashlet - rm code
+  become: yes
+  file:
+    path: /tmp/hashlet
+    state: absent

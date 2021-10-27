@@ -1,0 +1,24 @@
+---
+- name: remove fake hw clock
+  become: yes
+  apt:
+    name: fake-hwclock
+    state: absent
+
+- name: disable fake hwclock update-rc.d
+  become: yes
+  command: update-rc.d -f fake-hwclock remove
+
+
+- name: disable fake hwclock service
+  become: yes
+  service:
+    enabled: false
+    name: fake-hwclock
+
+- name: enable system to read RTC on boot
+  become: yes
+  copy:
+    src: files/hwclock-set
+    dest: /lib/udev/hwclock-set
+    

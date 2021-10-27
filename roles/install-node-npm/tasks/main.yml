@@ -1,0 +1,21 @@
+---
+- name: apt install nodejs npm
+  become: yes
+  apt:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+      - nodejs
+      - npm
+
+- name: upgrade to latest npm
+  npm:
+    name: npm
+    global: yes
+    version: 6.14.11
+
+- name: install process manager pm2
+  npm:
+    name: pm2
+    global: yes

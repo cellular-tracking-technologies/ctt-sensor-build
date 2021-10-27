@@ -1,0 +1,10 @@
+---
+- name: clean
+  become: yes 
+  apt:
+    autoclean: true
+    autoremove: true
+
+- name: reboot
+  become: yes 
+  reboot:

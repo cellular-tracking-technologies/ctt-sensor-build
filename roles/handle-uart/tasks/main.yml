@@ -1,0 +1,24 @@
+---
+- name: disable hciuart.service for bluetooth modem
+  become: yes
+  systemd:
+    name: hciuart
+    state: stopped
+    enabled: no
+
+# https://wiki.debian.org/KernelModuleBlacklisting
+- name: blacklist kernel modules
+  become: yes
+  copy:
+    dest: /etc/modprobe.d/blacklist-{{ item }}.conf
+    content: "blacklist {{ item }}"
+  with_items:
+    - bluetooth   # disable bluetooth
+    - hci_uart    # bluetooth uart
+    - snd_bcm2835 # on board sound processing
+    - rtl8192cu
+    - rtl8xxu
+
+- name: reboot
+  become: yes
+  reboot:

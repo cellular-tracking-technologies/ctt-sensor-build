@@ -1,0 +1,23 @@
+---
+- name: install gps software
+  become: true
+  apt: 
+    name: "{{ packages }}"
+    state: latest 
+  vars:
+    packages:
+    - gpsd
+    - gpsd-clients
+
+- name: configure gpsd
+  become: true
+  copy:
+    src: files/ctt-gpsd.conf
+    dest: /etc/default/gpsd
+    backup: true
+
+- name: enable gpsd systemd
+  become: true
+  systemd:
+    name: gpsd
+    enabled: true

@@ -1,0 +1,34 @@
+---
+- name: copy authorized key (can be deleted on wrap up)
+  authorized_key:
+    user: pi
+    state: present
+    key: "{{ lookup('file', 'files/new-pi.pem.pub') }}"
+
+- name: install environment packages for bob 
+  become: true
+  apt: 
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+    - vim
+
+- name: use dark background in vim
+  become: yes
+  lineinfile:
+    dest: /etc/vim/vimrc
+    regexp: 'set background='
+    line: 'set background=dark'
+
+- name: set command line vim mode, aliases
+  become: yes
+  become_user: pi
+  lineinfile:
+    dest: /home/pi/.bashrc
+    line: "{{ item }}"
+  with_items:
+    - set -o vi
+    - alias ll='ls -l' 
+    - alias la='ls -A' 
+    - alias l='ls -CF' 

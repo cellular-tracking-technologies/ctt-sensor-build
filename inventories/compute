@@ -1,0 +1,1 @@
+10.1.10.113 ansible_connection=ssh ansible_ssh_user=pi ansible_ssh_pass=raspberry ansible_ssh_common_args='-o StrictHostKeyChecking=no'

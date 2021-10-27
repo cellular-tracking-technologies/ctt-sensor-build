@@ -1,0 +1,20 @@
+- name: install chrony 
+  become: true
+  apt: 
+    name: chrony
+    state: latest
+
+- name: setup chrony config
+  become: true
+  copy:
+    src: files/ctt-chrony.conf
+    dest: /etc/chrony/chrony.conf
+    backup: true
+
+- name: restart chrony
+  become: true
+  systemd:
+    name: chronyd
+    state: restarted
+    enabled: true
+    daemon_reload: true
