@@ -22,7 +22,8 @@ Edit this file and replace the IP address with the IP address of the target mach
 ## CTT Sensor Station System Files
 `/etc/ctt/ctt.conf`
 
-* AWS S3 credentials for writing to ctt-motus-development S3 bucket
+* Configuration profile for radio mapping, recording data to disk, and LED blink frequency.
+[https://github.com/cellular-tracking-technologies/station-radio-interface/blob/v2/src/server/default-config.js](https://github.com/cellular-tracking-technologies/station-radio-interface/blob/v2/src/server/default-config.js)
 
 `/etc/ctt/station-id`
 
