@@ -16,6 +16,25 @@
     dest: /etc/default/gpsd
     backup: true
 
+# set kick gps script for gps hats
+- name: copy kick-gps script / service for gps hat
+  become: true
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { src: 'files/kick-gps.sh', dest: '/etc/ctt/kick-gps.sh', mode: '0755' }
+    - { src: 'files/kick-gps.service', dest: '/etc/systemd/system', mode: '0400' }
+
+# enable kick-gps service
+- name: enable kick-gps service
+  become: true
+  systemd:
+    name: kick-gps.service
+    enabled: yes
+
+# enable gpsd service on start
 - name: enable gpsd systemd
   become: true
   systemd:
