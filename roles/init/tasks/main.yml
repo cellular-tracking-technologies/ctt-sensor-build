@@ -6,11 +6,32 @@
     update_cache: yes
     cache_valid_time: 86400 #One day
 
+# station hardware configuration 
 - name: copy boot/config.txt
   become: yes
   copy:
     src: files/boot-config.txt
     dest: /boot/config.txt
+
+# disable auto upgrades...
+- name: disable auto upgrades / daily upgrades...
+  become: yes
+  ansible.builtin.systemd:
+    name: "{{ item.name }}"
+    enabled: "{{ item.masked }}"
+    masked: "{{ item.enabled }}"
+  with_items:
+    - { name: 'apt-daily-upgrade', masked: yes, enabled: no }
+    - { name: 'apt-daily', masked: yes, enabled: no }
+    - { name: 'apt-daily-upgrade.timer', masked: no, enabled: no }
+    - { name: 'apt-daily.timer', masked: no, enabled: no }
+
+# remove unattended upgrades...
+- name: remove unattended upgrades
+  become: yes
+  apt:
+    name: unattended-upgrades
+    state: absent
 
 - name: ensure /etc/ctt exists
   become: yes
@@ -48,20 +69,20 @@
     packages:
     - git
     - build-essential
+    - software-properties-common
     - minicom # for serial debugging
     - raspi-gpio # GPIO command line utility
-    - python-smbus
     - i2c-tools
     - libudev-dev
     - cmake
-    - python-pip
+    - python3-pip
     - python-dev
-    - python-wheel
-    - software-properties-common
+    - python3-wheel
+    - python3-smbus
+    - python3-venv
     - exfat-fuse
     - exfat-utils
     - avrdude
-    - python3-venv
     - bmon
 
 - name: enable i2c access
@@ -69,3 +90,8 @@
   lineinfile:
     path: /etc/modules
     line: i2c-dev
+
+- name: set timezone
+  become: yes
+  shell:
+    cmd: timedatectl set-timezone America/New_York

@@ -16,7 +16,7 @@
 
 - name: install hashlet for crypto chip
   become: yes
-  become_user: pi
+  become_user: ctt
   git: 
     repo: https://github.com/cryptotronix/hashlet.git
     dest: /tmp/hashlet
@@ -24,21 +24,21 @@
 
 - name: build configure hashlet
   become: yes
-  become_user: pi
+  become_user: ctt
   command:
     cmd: autoreconf -i
     chdir: /tmp/hashlet
 
 - name: run configure for hashlet
   become: yes
-  become_user: pi
+  become_user: ctt
   command:
     cmd: ./configure
     chdir: /tmp/hashlet
 
 - name: make hashlet
   become: yes
-  become_user: pi
+  become_user: ctt
   command:
     cmd: make
     chdir: /tmp/hashlet

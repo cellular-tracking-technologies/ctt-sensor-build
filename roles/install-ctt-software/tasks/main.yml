@@ -1,7 +1,7 @@
 ---
 - name: git station-utils
   become: yes
-  become_user: pi
+  become_user: ctt
   git:
     repo:  https://github.com/cellular-tracking-technologies/station-utils.git
     dest: "{{ software_dir }}/station-utils"
@@ -9,25 +9,25 @@
 
 - name: create ctt virtual environment directory
   become: yes
-  become_user: pi
+  become_user: ctt
   file:
-    path: /home/pi/ctt/.envs
+    path: /home/ctt/ctt/.envs
     state: directory
 
 - name: create python virutal environment for the sensor station
   become: yes
-  become_user: pi
-  shell: python3 -m venv /home/pi/ctt/.envs/station
+  become_user: ctt
+  shell: python3 -m venv /home/ctt/ctt/.envs/station
 
 - name: pip install dependencies
   become: yes
-  become_user: pi
+  become_user: ctt
   pip:
     name:
       - boto3
       - requests
       - pytz
-    virtualenv: /home/pi/ctt/.envs/station
+    virtualenv: /home/ctt/ctt/.envs/station
 
 - name: copy upload script
   become: yes
@@ -69,7 +69,7 @@
 
 - name: git station-hardware-server
   become: yes
-  become_user: pi
+  become_user: ctt 
   git:
     repo:  https://github.com/cellular-tracking-technologies/station-hardware-server.git
     dest: "{{ software_dir }}/station-hardware-server"
@@ -77,21 +77,21 @@
 
 - name: install station-hardware-server
   become: yes
-  become_user: pi
+  become_user: ctt
   shell:
     cmd: npm install
     chdir: "{{ software_dir }}/station-hardware-server"
 
 - name: compile station-hardware-server
   become: yes
-  become_user: pi
+  become_user: ctt
   shell:
     cmd: npm run build
     chdir: "{{ software_dir }}/station-hardware-server"
 
 - name: git station-lcd-interface
   become: yes
-  become_user: pi
+  become_user: ctt
   git:
     repo:  https://github.com/cellular-tracking-technologies/station-lcd-interface.git
     dest: "{{ software_dir }}/station-lcd-interface"
@@ -99,21 +99,21 @@
 
 - name: install station-lcd-interface
   become: yes
-  become_user: pi
+  become_user: ctt
   shell:
     cmd: npm install
     chdir: "{{ software_dir }}/station-lcd-interface"
 
 - name: compile station-lcd-interface
   become: yes
-  become_user: pi
+  become_user: ctt
   shell:
     cmd: npm run build
     chdir: "{{ software_dir }}/station-lcd-interface"
 
 - name: git station radio interface
   become: yes
-  become_user: pi
+  become_user: ctt
   git:
     repo: https://github.com/cellular-tracking-technologies/station-radio-interface.git
     dest: "{{ software_dir }}/station-radio-interface"
@@ -122,21 +122,21 @@
 
 - name: install station-radio-interface
   become: yes
-  become_user: pi
+  become_user: ctt
   shell:
     cmd: npm install
     chdir: "{{ software_dir }}/station-radio-interface"
 
 - name: compile station-radio-interface
   become: yes
-  become_user: pi
+  become_user: ctt
   shell:
     cmd: npm run build
     chdir: "{{ software_dir }}/station-radio-interface"
 
 - name: git station interface
   become: yes
-  become_user: pi
+  become_user: ctt
   git:
     repo: https://github.com/cellular-tracking-technologies/station-interface.git
     dest: "{{ software_dir }}/station-interface"
@@ -145,14 +145,14 @@
 
 - name: install station-interface
   become: yes
-  become_user: pi
+  become_user: ctt
   shell:
     cmd: npm install
     chdir: "{{ software_dir }}/station-interface"
 
 - name: compile station-interface
   become: yes
-  become_user: pi
+  become_user: ctt
   shell:
     cmd: npm run prep && npm run build
     chdir: "{{ software_dir }}/station-interface"

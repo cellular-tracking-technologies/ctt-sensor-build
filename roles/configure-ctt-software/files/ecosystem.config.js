@@ -2,7 +2,7 @@ module.exports = {
     apps : [{
       name: 'station-radio-interface',
       script: 'npm start',
-      cwd: '/home/pi/ctt/station-radio-interface',
+      cwd: '/home/ctt/ctt/station-radio-interface',
       instances: 1,
       autorestart: true,
       watch: false,
@@ -17,7 +17,7 @@ module.exports = {
     },{
       name: 'station-hardware-server',
       script: 'npm start',
-      cwd: '/home/pi/ctt/station-hardware-server',
+      cwd: '/home/ctt/ctt/station-hardware-server',
       instances: 1,
       autorestart: true,
       watch: false,
@@ -32,7 +32,7 @@ module.exports = {
     },{
       name: 'station-lcd-interface',
       script: 'npm start',
-      cwd: '/home/pi/ctt/station-lcd-interface',
+      cwd: '/home/ctt/ctt/station-lcd-interface',
       instances: 1,
       autorestart: true,
       watch: false,
@@ -47,7 +47,7 @@ module.exports = {
     },{
       name: 'station-interface',
       script: 'npm start',
-      cwd: '/home/pi/ctt/station-interface',
+      cwd: '/home/ctt/ctt/station-interface',
       instances: 1,
       autorestart: true,
       watch: false,
@@ -59,6 +59,5 @@ module.exports = {
       env_production: {
         NODE_ENV: 'production'
       }
-
     }]
   };

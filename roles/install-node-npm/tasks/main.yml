@@ -1,21 +1,32 @@
 ---
-- name: apt install nodejs npm
+#install nvm https://gist.github.com/komuw/b3b5d24977d4df7bd549
+- name: install nvm for node versioning
   become: yes
-  apt:
-    name: "{{ packages }}"
-    state: latest
-  vars:
-    packages:
-      - nodejs
-      - npm
+  become_user: ctt
+  shell: >
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    creates=/home/{{ user }}/.nvm/nvm.sh
 
-- name: upgrade to latest npm
-  npm:
-    name: npm
-    global: yes
-    version: 6.14.11
+- name: Install node version 10 (max version for successful i2c-bus npm library for LCD screen...)
+  become: yes
+  become_user: ctt
+  shell: >
+    /bin/bash -c "source /home/{{ user }}/.nvm/nvm.sh && nvm install 10.24.1 && nvm alias default 10"
+    creates=/home/{{ user }}/.nvm/alias 
 
 - name: install process manager pm2
   npm:
     name: pm2
     global: yes
+
+- name: create symlink for node / npm / pm2 for sudo access
+  become: yes
+  ansible.builtin.file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  with_items:
+    - { src: '/home/{{ user }}/.nvm/versions/node/v10.24.1/bin/node', dest: '/usr/local/bin/node' }
+    - { src: '/home/{{ user }}/.nvm/versions/node/v10.24.1/bin/npm', dest: '/usr/local/bin/npm' }
+    - { src: '/home/{{ user }}/.nvm/versions/node/v10.24.1/bin/pm2', dest: '/usr/local/bin/pm2' }
+
