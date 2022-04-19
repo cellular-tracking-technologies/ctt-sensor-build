@@ -2,4 +2,4 @@
 *.retry
 *.pem
 *.pub
-inventories.*
+inventories/*
