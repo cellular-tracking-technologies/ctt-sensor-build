@@ -14,12 +14,7 @@
     /bin/bash -c "source /home/{{ user }}/.nvm/nvm.sh && nvm install 10.24.1 && nvm alias default 10"
     creates=/home/{{ user }}/.nvm/alias 
 
-- name: install process manager pm2
-  npm:
-    name: pm2
-    global: yes
-
-- name: create symlink for node / npm / pm2 for sudo access
+- name: create symlink for node / npm 
   become: yes
   ansible.builtin.file:
     src: "{{ item.src }}"
@@ -28,5 +23,15 @@
   with_items:
     - { src: '/home/{{ user }}/.nvm/versions/node/v10.24.1/bin/node', dest: '/usr/local/bin/node' }
     - { src: '/home/{{ user }}/.nvm/versions/node/v10.24.1/bin/npm', dest: '/usr/local/bin/npm' }
-    - { src: '/home/{{ user }}/.nvm/versions/node/v10.24.1/bin/pm2', dest: '/usr/local/bin/pm2' }
 
+- name: install process manager pm2
+  npm:
+    name: pm2
+    global: yes
+
+- name: create symlink for pm2
+  become: yes
+  ansible.builtin.file:
+    src: "/home/{{ user }}/.nvm/versions/node/v10.24.1/bin/pm2"
+    dest: "/usr/local/bin/pm2"
+    state: link
