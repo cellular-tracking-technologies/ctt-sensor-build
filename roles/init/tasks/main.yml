@@ -10,7 +10,7 @@
 - name: copy boot/config.txt
   become: yes
   copy:
-    src: files/boot-config.txt
+    src: files/v3-boot-config.txt
     dest: /boot/config.txt
 
 # disable auto upgrades...
