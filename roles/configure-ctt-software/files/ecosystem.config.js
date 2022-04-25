@@ -1,8 +1,8 @@
 module.exports = {
     apps : [{
       name: 'station-radio-interface',
-      script: 'npm start',
-      cwd: '/home/ctt/ctt/station-radio-interface',
+      script: 'npm run start-radio-interface',
+      cwd: '/home/ctt/ctt/sensor-station-software',
       instances: 1,
       autorestart: true,
       watch: false,
@@ -16,8 +16,8 @@ module.exports = {
       }
     },{
       name: 'station-hardware-server',
-      script: 'npm start',
-      cwd: '/home/ctt/ctt/station-hardware-server',
+      script: 'npm run start-hardware-server',
+      cwd: '/home/ctt/ctt/sensor-station-software',
       instances: 1,
       autorestart: true,
       watch: false,
@@ -31,8 +31,8 @@ module.exports = {
       }
     },{
       name: 'station-lcd-interface',
-      script: 'npm start',
-      cwd: '/home/ctt/ctt/station-lcd-interface',
+      script: 'npm run start-lcd-interface',
+      cwd: '/home/ctt/ctt/sensor-station-software',
       instances: 1,
       autorestart: true,
       watch: false,
@@ -46,8 +46,8 @@ module.exports = {
       }
     },{
       name: 'station-interface',
-      script: 'npm start',
-      cwd: '/home/ctt/ctt/station-interface',
+      script: 'npm run start-web-interface',
+      cwd: '/home/ctt/ctt/sensor-station-software',
       instances: 1,
       autorestart: true,
       watch: false,

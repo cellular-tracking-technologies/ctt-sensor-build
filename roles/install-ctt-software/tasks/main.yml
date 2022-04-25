@@ -67,92 +67,23 @@
     day: 3
     job: "/sbin/shutdown -r now"
 
-- name: git station-hardware-server
+- name: git ctt station software
   become: yes
-  become_user: ctt 
+  become_user: ctt
   git:
-    repo:  https://github.com/cellular-tracking-technologies/station-hardware-server.git
-    dest: "{{ software_dir }}/station-hardware-server"
-    force: yes
+    repo: https://github.com/cellular-tracking-technologies/sensor-station-software.git
+    dest: "{{ software_dir }}//sensor-station-software"
 
-- name: install station-hardware-server
+- name: install sensor-station-software node modules
   become: yes
   become_user: ctt
   shell:
     cmd: npm install
-    chdir: "{{ software_dir }}/station-hardware-server"
+    chdir: "{{ software_dir }}/sensor-station-software"
 
-- name: compile station-hardware-server
+- name: transpile sensor-station-software 
   become: yes
   become_user: ctt
   shell:
     cmd: npm run build
-    chdir: "{{ software_dir }}/station-hardware-server"
-
-- name: git station-lcd-interface
-  become: yes
-  become_user: ctt
-  git:
-    repo:  https://github.com/cellular-tracking-technologies/station-lcd-interface.git
-    dest: "{{ software_dir }}/station-lcd-interface"
-    force: yes
-
-- name: install station-lcd-interface
-  become: yes
-  become_user: ctt
-  shell:
-    cmd: npm install
-    chdir: "{{ software_dir }}/station-lcd-interface"
-
-- name: compile station-lcd-interface
-  become: yes
-  become_user: ctt
-  shell:
-    cmd: npm run build
-    chdir: "{{ software_dir }}/station-lcd-interface"
-
-- name: git station radio interface
-  become: yes
-  become_user: ctt
-  git:
-    repo: https://github.com/cellular-tracking-technologies/station-radio-interface.git
-    dest: "{{ software_dir }}/station-radio-interface"
-    force: yes
-    version: v2
-
-- name: install station-radio-interface
-  become: yes
-  become_user: ctt
-  shell:
-    cmd: npm install
-    chdir: "{{ software_dir }}/station-radio-interface"
-
-- name: compile station-radio-interface
-  become: yes
-  become_user: ctt
-  shell:
-    cmd: npm run build
-    chdir: "{{ software_dir }}/station-radio-interface"
-
-- name: git station interface
-  become: yes
-  become_user: ctt
-  git:
-    repo: https://github.com/cellular-tracking-technologies/station-interface.git
-    dest: "{{ software_dir }}/station-interface"
-    force: yes
-    version: v2
-
-- name: install station-interface
-  become: yes
-  become_user: ctt
-  shell:
-    cmd: npm install
-    chdir: "{{ software_dir }}/station-interface"
-
-- name: compile station-interface
-  become: yes
-  become_user: ctt
-  shell:
-    cmd: npm run prep && npm run build
-    chdir: "{{ software_dir }}/station-interface"
+    chdir: "{{ software_dir }}/sensor-station-software"
