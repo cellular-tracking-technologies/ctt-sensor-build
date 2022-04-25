@@ -1,5 +1,5 @@
 #!/bin/bash
-script='/home/ctt/ctt/station-utils/station-updater.py'
+script='/home/ctt/ctt/sensor-station-software/src/station-utils/station-updater.py'
 processes=$(ps -ef | grep $script | grep -v grep | xargs)
 if [ -n "$processes" ]; then
     echo 'killing prior upload process before beginning next upload session'
