@@ -1,12 +1,4 @@
 ---
-- name: git station-utils
-  become: yes
-  become_user: ctt
-  git:
-    repo:  https://github.com/cellular-tracking-technologies/station-utils.git
-    dest: "{{ software_dir }}/station-utils"
-    force: yes
-
 - name: create ctt virtual environment directory
   become: yes
   become_user: ctt
