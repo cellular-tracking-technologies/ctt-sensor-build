@@ -23,7 +23,6 @@
   with_items:
     - { name: 'apt-daily-upgrade', masked: yes, enabled: no }
     - { name: 'apt-daily', masked: yes, enabled: no }
-    - { name: 'unattended-upgrades', masked: yes, enabled: no }
     - { name: 'apt-daily-upgrade.timer', masked: no, enabled: no }
     - { name: 'apt-daily.timer', masked: no, enabled: no }
 
