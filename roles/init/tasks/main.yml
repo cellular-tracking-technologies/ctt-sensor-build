@@ -10,7 +10,7 @@
 - name: copy boot/config.txt
   become: yes
   copy:
-    src: files/v3-boot-config.txt
+    src: files/config.txt
     dest: /boot/config.txt
 
 # disable auto upgrades...
@@ -92,7 +92,7 @@
     path: /etc/modules
     line: i2c-dev
 
-# - name: set timezone
+- name: set timezone
   become: yes
   shell:
     cmd: timedatectl set-timezone America/New_York
