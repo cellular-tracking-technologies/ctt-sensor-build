@@ -8,9 +8,15 @@
 - name: create modem rules folder
   become: yes
   file:
-    path: /etc/ctt/modem
+    path: "{{ item.path }}"
     state: directory
     mode: '0755'
+  with_items:
+    - { path: '/etc/ctt/fw' }
+    - { path: '/etc/ctt/modem' }
+    - { path: '/etc/ctt/radios' }
+    - { path: '/etc/ctt/scripts' }
+    - { path: '/etc/ctt/systemd' }
 
 - name: copy configuration scripts
   become: yes
@@ -21,15 +27,18 @@
     - { src: 'files/twilio-chatscript', dest: '/etc/chatscripts/twilio'}
     - { src: 'files/simcom-chat-disconnect', dest: '/etc/chatscripts/disconnect'}
     - { src: 'files/ppp-gprs', dest: '/etc/ppp/peers/gprs' }
-    - { src: 'files/modem.service', dest: '/etc/systemd/system'}
+    - { src: 'files/modem.service', dest: '/etc/ctt/systemd/modem.service'}
     - { src: 'files/quectel-modem.rules', dest: '/etc/ctt/modem/quectel-modem.rules' }
 
 - name: create link to default quectel modem
   become: yes
   file:
-    src: /etc/ctt/modem/quectel-modem.rules
-    dest: /etc/udev/rules.d/23-modem.rules
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     state: link
+  with_items:
+    - { src: '/etc/ctt/modem/quectel-modem.rules', dest: '/etc/udev/rules.d/23-modem.rules' }
+    - { src: '/etc/ctt/systemd/modem.service', dest: '/etc/systemd/system/modem.service' }
 
 - name: reload systemd
   become: yes

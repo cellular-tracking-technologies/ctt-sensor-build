@@ -21,44 +21,6 @@
       - pytz
     virtualenv: /home/ctt/ctt/.envs/station
 
-- name: copy upload script
-  become: yes
-  copy:
-    src: "files/upload-station-data.sh"
-    dest: "/usr/bin/upload-station-data"
-    mode: "0755"
-
-- name: copy station-update script
-  become: yes
-  copy:
-    src: "files/bash-update-station.sh"
-    dest: "/usr/bin/bash-update-station"
-    mode: "0755"
-
-- name: upload cron job
-  become: yes
-  cron:
-    name: "data upload cron job"
-    minute: 11
-    job: "upload-station-data"
-
-- name: bash update cron job
-  become: yes
-  cron:
-    name: "bash update station OTA"
-    hour: 20
-    minute: 43 
-    job: "bash-update-station"
-
-- name: reboot weekly
-  become: yes
-  cron:
-    name: "reboot weekly"
-    hour: 06
-    minute: 43
-    day: 3
-    job: "/sbin/shutdown -r now"
-
 - name: git ctt station software
   become: yes
   become_user: ctt
@@ -71,11 +33,4 @@
   become_user: ctt
   shell:
     cmd: npm install
-    chdir: "{{ software_dir }}/sensor-station-software"
-
-- name: transpile sensor-station-software 
-  become: yes
-  become_user: ctt
-  shell:
-    cmd: npm run build
     chdir: "{{ software_dir }}/sensor-station-software"

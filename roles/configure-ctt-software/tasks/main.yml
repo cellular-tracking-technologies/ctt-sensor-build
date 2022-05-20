@@ -17,62 +17,79 @@
     dest: "{{ item.dest }}"
     mode: "{{ item.mode }}"
   with_items:
-    - { src: 'station-id.sh', dest: '/usr/bin/station-id', mode: '0755' }
-    - { src: 'save-station-id.sh', dest: '/etc/ctt/scripts/save-station-id.sh', mode: '0755' }
-    - { src: 'files/station-boot.service', dest: '/etc/systemd/system', mode: '0400' }
-    - { src: 'files/program-radios.sh', dest: '/usr/bin/program-radios', mode: '0755' }
-    - { src: 'files/program-radio.sh', dest: '/usr/bin/program-radio', mode: '0755' }
-    - { src: 'files/update-station.sh', dest: '/usr/bin/update-station', mode: '0755' }
-    - { src: 'files/ss_v2.4.1.hex', dest: '/etc/ctt/fw', mode: '0400' }
+    - { src: 'files/scripts/station-id', dest: '/etc/ctt/scripts/station-id', mode: '0755' }
+    - { src: 'files/scripts/save-station-id', dest: '/etc/ctt/scripts/save-station-id', mode: '0755' }
+    - { src: 'files/scripts/program-radios', dest: '/etc/ctt/scripts/program-radios', mode: '0755' }
+    - { src: 'files/scripts/program-radio', dest: '/etc/ctt/scripts/program-radio', mode: '0755' }
+    - { src: 'files/scripts/update-station.sh', dest: '/etc/ctt/scripts/update-station', mode: '0755' }
+    - { src: 'files/scripts/bash-update-station.sh', dest: '/etc/ctt/scripts/bash-update-station', mode: '0755' }
+    - { src: 'files/scripts/upload-station-data.sh', dest: '/etc/ctt/scripts/upload-station-data', mode: '0755' }
+    - { src: 'files/radios/v2-radio-map.js', dest: '/etc/ctt/radios/v2-radio-map.js', mode: '0644' }
+    - { src: 'files/radios/v3-radio-map.js', dest: '/etc/ctt/radios/v3-radio-map.js', mode: '0644' }
+    - { src: 'files/systemd/station-boot.service', dest: '/etc/ctt/systemd', mode: '0644' }
+    - { src: 'files/systemd/station-hardware-server.service', dest: '/etc/ctt/systemd', mode: '0644' }
+    - { src: 'files/systemd/station-lcd-interface.service', dest: '/etc/ctt/systemd', mode: '0644' }
+    - { src: 'files/systemd/station-radio-interface.service', dest: '/etc/ctt/systemd', mode: '0644' }
+    - { src: 'files/systemd/station-web-interface.service', dest: '/etc/ctt/systemd', mode: '0644' }
+    - { src: 'files/fw/ss_v2.4.1.hex', dest: '/etc/ctt/fw', mode: '0644' }
 
-- name: default fw link
+- name: create symlinks
   become: yes
   file:
-      src: /etc/ctt/fw/ss_v2.4.1.hex
-      dest: /etc/ctt/fw/default
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
       state: link
+  with_items:
+    - { src: '/etc/ctt/scripts/station-id', dest: '/usr/local/sbin/station-id'}
+    - { src: '/etc/ctt/scripts/program-radios', dest: '/usr/local/sbin/program-radios'}
+    - { src: '/etc/ctt/scripts/program-radio', dest: '/usr/local/sbin/program-radio'}
+    - { src: '/etc/ctt/scripts/update-station', dest: '/usr/local/sbin/update-station'}
+    - { src: '/etc/ctt/scripts/bash-update-station', dest: '/usr/local/sbin/bash-update-station'}
+    - { src: '/etc/ctt/scripts/upload-station-data', dest: '/usr/local/sbin/upload-station-data'}
+    - { src: '/etc/ctt/systemd/station-boot.service', dest: '/etc/systemd/system/station-boot.service' }
+    - { src: '/etc/ctt/systemd/station-hardware-server.service', dest: '/etc/systemd/system/station-hardware-server.service' }
+    - { src: '/etc/ctt/systemd/station-lcd-interface.service', dest: '/etc/systemd/system/station-lcd-interface.service' }
+    - { src: '/etc/ctt/systemd/station-radio-interface.service', dest: '/etc/systemd/system/station-radio-interface.service' }
+    - { src: '/etc/ctt/systemd/station-web-interface.service', dest: '/etc/systemd/system/station-web-interface.service' }
 
-- name: enable station id on boot
+- name: enable ctt services on boot
+  become: yes
+  systemd:
+    name:  "{{ item.name }}"
+    state: started
+    enabled: yes
+  with_items:
+    - { name: 'station-boot.service' }
+    - { name: 'station-hardware-server.service' }
+    - { name: 'station-radio-interface.service' }
+    - { name: 'station-lcd-interface.service' }
+    - { name: 'station-web-interface.service' }
+ 
+- name: reload systemd
   become: yes
   systemd:
     daemon_reload: yes
-    name: station-boot.service
-    state: started
-    enabled: yes
- 
-- name: install pm2 ecosystem
-  become: yes
-  copy:
-    src: "ecosystem.config.js"
-    dest: "/etc/ctt/ecosystem.config.js"
-    mode: '0400'
 
-- name: start pm2
+- name: upload cron job
   become: yes
-  shell:
-    cmd: "pm2 start /etc/ctt/ecosystem.config.js"
+  cron:
+    name: "data upload cron job"
+    minute: 11
+    job: "upload-station-data"
 
-- name: enable pm2 startup
+- name: bash update cron job
   become: yes
-  shell:
-    cmd: "pm2 startup"
+  cron:
+    name: "bash update station OTA"
+    hour: 20
+    minute: 43 
+    job: "bash-update-station"
 
-- name: persist startup
+- name: reboot weekly
   become: yes
-  shell:
-    cmd: "pm2 save"
-
-- name: pm2 log rotate
-  become: yes
-  shell:
-    cmd: "pm2 install pm2-logrotate"
-
-- name: pm2 compress rotated logs
-  become: yes
-  shell:
-    cmd: "pm2 set pm2-logrotate:compress true"
-
-- name: pm2 maintain 180 days of logs
-  become: yes
-  shell:
-    cmd: "pm2 set pm2-logrotate:retain 180"
+  cron:
+    name: "reboot weekly"
+    hour: 06
+    minute: 43
+    day: 3
+    job: "/sbin/shutdown -r now"
