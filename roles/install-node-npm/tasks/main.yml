@@ -7,11 +7,11 @@
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
     creates=/home/{{ user }}/.nvm/nvm.sh
 
-- name: Install node version 10 (max version for successful i2c-bus npm library for LCD screen...)
+- name: install node version 12 
   become: yes
   become_user: ctt
   shell: >
-    /bin/bash -c "source /home/{{ user }}/.nvm/nvm.sh && nvm install 10.24.1 && nvm alias default 10"
+    /bin/bash -c "source /home/{{ user }}/.nvm/nvm.sh && nvm install 12.22.12 && nvm alias default 12"
     creates=/home/{{ user }}/.nvm/alias 
 
 - name: create symlink for node / npm 
@@ -21,17 +21,5 @@
     dest: "{{ item.dest }}"
     state: link
   with_items:
-    - { src: '/home/{{ user }}/.nvm/versions/node/v10.24.1/bin/node', dest: '/usr/local/bin/node' }
-    - { src: '/home/{{ user }}/.nvm/versions/node/v10.24.1/bin/npm', dest: '/usr/local/bin/npm' }
-
-- name: install process manager pm2
-  npm:
-    name: pm2
-    global: yes
-
-- name: create symlink for pm2
-  become: yes
-  ansible.builtin.file:
-    src: "/home/{{ user }}/.nvm/versions/node/v10.24.1/bin/pm2"
-    dest: "/usr/local/bin/pm2"
-    state: link
+    - { src: '/home/{{ user }}/.nvm/versions/node/v12.22.12/bin/node', dest: '/usr/local/bin/node' }
+    - { src: '/home/{{ user }}/.nvm/versions/node/v12.22.12/bin/npm', dest: '/usr/local/bin/npm' }
