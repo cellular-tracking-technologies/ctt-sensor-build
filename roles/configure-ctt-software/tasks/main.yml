@@ -51,6 +51,7 @@
     - { src: '/etc/ctt/systemd/station-lcd-interface.service', dest: '/etc/systemd/system/station-lcd-interface.service' }
     - { src: '/etc/ctt/systemd/station-radio-interface.service', dest: '/etc/systemd/system/station-radio-interface.service' }
     - { src: '/etc/ctt/systemd/station-web-interface.service', dest: '/etc/systemd/system/station-web-interface.service' }
+    - { src: '/etc/ctt/fw/ss_v2.4.1.hex', dest: '/etc/ctt/fw/default' }
 
 - name: enable ctt services on boot
   become: yes
