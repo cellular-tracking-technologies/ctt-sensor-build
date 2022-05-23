@@ -10,7 +10,7 @@ check_run() {
 
 dir='/home/ctt/ctt/sensor-station-software'
 # check if the software directory exists
-if [ -d $dir]; then
+if [ -d $dir ]; then
   # directory exists - stash any changes and do a git pull
   cd $dir
   sudo -u ctt git stash
@@ -26,7 +26,10 @@ else
   npm update && npm run build
 fi
 
-sudo pm2 restart all
+sudo systemctl restart station-hardware-server
+sudo systemctl restart station-lcd-interface
+sudo systemctl restart station-radio-interface
+sudo systemctl restart station-web-interface
 
 sudo sh -c "date -u +'%Y-%m-%d %H:%M:%S' > /etc/ctt/station-software"
 
