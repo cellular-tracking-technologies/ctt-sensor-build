@@ -1,15 +1,24 @@
 ---
+- name: ensure /lib/ctt directory exists
+  become: yes
+  ansible.builtin.file:
+    path: "{{ software_dir }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
+
 - name: create ctt virtual environment directory
   become: yes
   become_user: ctt
   file:
-    path: /home/ctt/ctt/.envs
+    path: "{{ software_dir }}/.envs"
     state: directory
 
 - name: create python virutal environment for the sensor station
   become: yes
   become_user: ctt
-  shell: python3 -m venv /home/ctt/ctt/.envs/station
+  shell: python3 -m venv "{{ software_dir }}/.envs/station"
 
 - name: pip install dependencies
   become: yes
@@ -19,14 +28,14 @@
       - boto3
       - requests
       - pytz
-    virtualenv: /home/ctt/ctt/.envs/station
+    virtualenv: "{{ software_dir }}/.envs/station"
 
 - name: git ctt station software
   become: yes
   become_user: ctt
   git:
     repo: https://github.com/cellular-tracking-technologies/sensor-station-software.git
-    dest: "{{ software_dir }}//sensor-station-software"
+    dest: "{{ software_dir }}/sensor-station-software"
 
 - name: install sensor-station-software node modules
   become: yes

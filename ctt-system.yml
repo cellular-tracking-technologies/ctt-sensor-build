@@ -4,9 +4,9 @@
   gather_facts: no
   vars:
     user: ctt
+    software_dir: /lib/ctt
   roles:
     - install-node-npm
     - install-ctt-software
     - configure-ctt-software
     - wrap-up
-    

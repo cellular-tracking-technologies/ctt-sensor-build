@@ -4,7 +4,7 @@ After=station-hardware-server.service
 
 [Service]
 Type=simple
-WorkingDirectory=/home/ctt/ctt/sensor-station-software
+WorkingDirectory=/lib/ctt/sensor-station-software
 ExecStart=npm run start-web-interface
 Restart=on-failure
 TimeoutSec=60

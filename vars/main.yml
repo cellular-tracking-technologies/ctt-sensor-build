@@ -1,6 +1,0 @@
----
-HW_CLOCK_MODEL: ds3231
-PPS_GPIO_PIN: 13
-user: ctt
-software_dir: "/home/{{ user }}"
-dependency_dir: "{{ software_dir }}/dependencies"

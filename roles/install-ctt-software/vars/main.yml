@@ -1,3 +1,0 @@
----
-software_dir: /home/ctt/ctt
-dependency_dir: "{{ software_dir }}/dependencies"

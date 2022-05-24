@@ -1,5 +1,5 @@
 ---
-- name: make sure /etc/ctt exists
+- name: make sure /etc/ctt directories /data directory exists
   become: yes
   file:
     path: "{{ item.path }}"
@@ -7,8 +7,10 @@
     mode: '0755'
   with_items:
     - { path: '/etc/ctt/scripts'}
-    - { path: '/data' }
     - { path: '/etc/ctt/fw' }
+    - { path: '/etc/ctt/systemd' }
+    - { path: '/etc/ctt/radios' }
+    - { path: '/data' }
 
 - name: copy configuration scripts
   become: yes

@@ -1,6 +1,6 @@
 #!/bin/bash
 # get station-id from chip or read from disk
-/usr/local/bin/node /home/ctt/ctt/sensor-station-software/src/id-driver/station-revision.js
+/usr/local/bin/node /lib/ctt/sensor-station-software/src/id-driver/station-revision.js
 typeset -i version=$(cat /etc/ctt/station-revision)
 RADIO_MAP=/etc/ctt/radio-map.json
 if test -f $RADIO_MAP; then
