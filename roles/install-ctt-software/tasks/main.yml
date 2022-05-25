@@ -43,3 +43,9 @@
   shell:
     cmd: npm install
     chdir: "{{ software_dir }}/sensor-station-software"
+
+- name: ensure bootcount file exists for hardware server check
+  become: yes
+  copy:
+    dest: '/etc/bootcount'
+    content: '0'
