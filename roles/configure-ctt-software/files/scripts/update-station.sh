@@ -19,7 +19,7 @@ if [ -d $dir ]; then
   # directory exists - stash any changes and do a git pull
   cd $dir
   sudo git stash
-  sudo ctt git pull
+  sudo git pull
   # checking if package.json has changed
   changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)" 
   check_run package.json "npm update"
