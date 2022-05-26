@@ -38,4 +38,5 @@ sudo systemctl restart station-web-interface
 
 sudo sh -c "date -u +'%Y-%m-%d %H:%M:%S' > /etc/ctt/station-software"
 
-echo 'Sensor Station Update Complete\n'
+echo 'Sensor Station Update Complete'
+echo
