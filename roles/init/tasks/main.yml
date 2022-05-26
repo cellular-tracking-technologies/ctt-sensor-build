@@ -26,10 +26,14 @@
     - { name: 'apt-daily-upgrade.timer', masked: no, enabled: no }
     - { name: 'apt-daily.timer', masked: no, enabled: no }
 
+- name: reboot before removing unattended upgrades...
+  become: yes
+  reboot:
+
 # remove unattended upgrades...
 - name: remove unattended upgrades
   become: yes
-  apt:
+  ansible.builtin.apt:
     name: unattended-upgrades
     state: absent
     purge: yes
