@@ -7,15 +7,15 @@
     software_dir: /lib/ctt
     hostname: sensorstation
   roles:
-    # - init
-    # - bob-dev
-    # - install-node-npm
-    # - install-ctt-software
-    # - hwclock
-    # - gps
-    # - enable-modem
-    # - handle-uart
-    # - chrony
-    # - crypto-chip
+    - init
+    - bob-dev
+    - install-node-npm
+    - install-ctt-software
+    - hwclock
+    - gps
+    - enable-modem
+    - handle-uart
+    - chrony
+    - crypto-chip
     - configure-ctt-software
     - wrap-up
