@@ -1,63 +1,47 @@
 ---
 - name: make sure /etc/ctt directories /data directory exists
   become: yes
-  file:
+  ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
     mode: '0755'
   with_items:
-    - { path: '/etc/ctt/scripts'}
     - { path: '/etc/ctt/fw' }
-    - { path: '/etc/ctt/systemd' }
-    - { path: '/etc/ctt/radios' }
     - { path: '/data' }
 
-- name: copy configuration scripts
+- name: copy radio firmware
   become: yes
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    mode: "{{ item.mode }}"
   with_items:
-    - { src: 'files/scripts/station-id', dest: '/etc/ctt/scripts/station-id', mode: '0755' }
-    - { src: 'files/scripts/save-station-id', dest: '/etc/ctt/scripts/save-station-id', mode: '0755' }
-    - { src: 'files/scripts/program-radios', dest: '/etc/ctt/scripts/program-radios', mode: '0755' }
-    - { src: 'files/scripts/program-radio', dest: '/etc/ctt/scripts/program-radio', mode: '0755' }
-    - { src: 'files/scripts/update-station.sh', dest: '/etc/ctt/scripts/update-station', mode: '0755' }
-    - { src: 'files/scripts/bash-update-station.sh', dest: '/etc/ctt/scripts/bash-update-station', mode: '0755' }
-    - { src: 'files/scripts/upload-station-data.sh', dest: '/etc/ctt/scripts/upload-station-data', mode: '0755' }
-    - { src: 'files/radios/v2-radio-map.js', dest: '/etc/ctt/radios/v2-radio-map.js', mode: '0644' }
-    - { src: 'files/radios/v3-radio-map.js', dest: '/etc/ctt/radios/v3-radio-map.js', mode: '0644' }
-    - { src: 'files/systemd/station-boot.service', dest: '/etc/ctt/systemd', mode: '0644' }
-    - { src: 'files/systemd/station-hardware-server.service', dest: '/etc/ctt/systemd', mode: '0644' }
-    - { src: 'files/systemd/station-lcd-interface.service', dest: '/etc/ctt/systemd', mode: '0644' }
-    - { src: 'files/systemd/station-radio-interface.service', dest: '/etc/ctt/systemd', mode: '0644' }
-    - { src: 'files/systemd/station-web-interface.service', dest: '/etc/ctt/systemd', mode: '0644' }
-    - { src: 'files/fw/ss_v2.4.1.hex', dest: '/etc/ctt/fw', mode: '0644' }
+    - { src: "files/fw/ss_v2.4.1.hex", dest: '/etc/ctt/fw/ss_v2.4.1.hex' }
+    - { src: "files/fw/ss_v3.0.0.hex", dest: '/etc/ctt/fw/ss_v3.0.0.hex' }
 
 - name: create symlinks
   become: yes
-  file:
+  ansible.builtin.file:
       src: "{{ item.src }}"
       dest: "{{ item.dest }}"
       state: link
+      force: yes
   with_items:
-    - { src: '/etc/ctt/scripts/station-id', dest: '/usr/local/sbin/station-id'}
-    - { src: '/etc/ctt/scripts/program-radios', dest: '/usr/local/sbin/program-radios'}
-    - { src: '/etc/ctt/scripts/program-radio', dest: '/usr/local/sbin/program-radio'}
-    - { src: '/etc/ctt/scripts/update-station', dest: '/usr/local/sbin/update-station'}
-    - { src: '/etc/ctt/scripts/bash-update-station', dest: '/usr/local/sbin/bash-update-station'}
-    - { src: '/etc/ctt/scripts/upload-station-data', dest: '/usr/local/sbin/upload-station-data'}
-    - { src: '/etc/ctt/systemd/station-boot.service', dest: '/etc/systemd/system/station-boot.service' }
-    - { src: '/etc/ctt/systemd/station-hardware-server.service', dest: '/etc/systemd/system/station-hardware-server.service' }
-    - { src: '/etc/ctt/systemd/station-lcd-interface.service', dest: '/etc/systemd/system/station-lcd-interface.service' }
-    - { src: '/etc/ctt/systemd/station-radio-interface.service', dest: '/etc/systemd/system/station-radio-interface.service' }
-    - { src: '/etc/ctt/systemd/station-web-interface.service', dest: '/etc/systemd/system/station-web-interface.service' }
-    - { src: '/etc/ctt/fw/ss_v2.4.1.hex', dest: '/etc/ctt/fw/default' }
+    - { src: "{{ software_dir }}/sensor-station-software/system/scripts/station-id.sh", dest: '/usr/local/sbin/station-id'}
+    - { src: "{{ software_dir }}/sensor-station-software/system/scripts/program-radios.sh", dest: '/usr/local/sbin/program-radios'}
+    - { src: "{{ software_dir }}/sensor-station-software/system/scripts/program-radio.sh", dest: '/usr/local/sbin/program-radio'}
+    - { src: "{{ software_dir }}/sensor-station-software/system/scripts/update-station.sh", dest: '/usr/local/sbin/update-station'}
+    - { src: "{{ software_dir }}/sensor-station-software/system/scripts/bash-update-station.sh", dest: '/usr/local/sbin/bash-update-station'}
+    - { src: "{{ software_dir }}/sensor-station-software/system/scripts/upload-station-data.sh", dest: '/usr/local/sbin/upload-station-data'}
+    - { src: "{{ software_dir }}/sensor-station-software/system/systemd/station-boot.service", dest: '/etc/systemd/system/station-boot.service' }
+    - { src: "{{ software_dir }}/sensor-station-software/system/systemd/station-hardware-server.service", dest: '/etc/systemd/system/station-hardware-server.service' }
+    - { src: "{{ software_dir }}/sensor-station-software/system/systemd/station-lcd-interface.service", dest: '/etc/systemd/system/station-lcd-interface.service' }
+    - { src: "{{ software_dir }}/sensor-station-software/system/systemd/station-radio-interface.service", dest: '/etc/systemd/system/station-radio-interface.service' }
+    - { src: "{{ software_dir }}/sensor-station-software/system/systemd/station-web-interface.service", dest: '/etc/systemd/system/station-web-interface.service' }
+    - { src: "/etc/ctt/fw/ss_v3.0.0.hex", dest: "/etc/ctt/fw/default" }
 
 - name: enable ctt services on boot
   become: yes
-  systemd:
+  ansible.builtin.systemd:
     name:  "{{ item.name }}"
     state: started
     enabled: yes
@@ -70,27 +54,27 @@
  
 - name: reload systemd
   become: yes
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: yes
 
 - name: upload cron job
   become: yes
-  cron:
+  ansible.builtin.cron:
     name: "data upload cron job"
     minute: 11
-    job: "upload-station-data"
+    job: "/usr/local/sbin/upload-station-data"
 
 - name: bash update cron job
   become: yes
-  cron:
+  ansible.builtin.cron:
     name: "bash update station OTA"
     hour: 20
     minute: 43 
-    job: "bash-update-station"
+    job: "/usr/local/sbin/bash-update-station"
 
 - name: reboot weekly
   become: yes
-  cron:
+  ansible.builtin.cron:
     name: "reboot weekly"
     hour: 06
     minute: 43

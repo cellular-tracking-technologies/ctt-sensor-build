@@ -1,20 +1,21 @@
 - name: install chrony 
-  become: true
-  apt: 
+  become: yes
+  ansible.builtin.apt: 
     name: chrony
     state: latest
 
-- name: setup chrony config
-  become: true
-  copy:
-    src: files/ctt-chrony.conf
+- name: create chrony conf link
+  become: yes
+  ansible.builtin.file:
+    src: "{{ software_dir }}/sensor-station-software/system/chrony/ctt-chrony.conf"
     dest: /etc/chrony/chrony.conf
-    backup: true
+    state: link
+    force: yes
 
 - name: restart chrony
-  become: true
-  systemd:
+  become: yes
+  ansible.builtin.systemd:
     name: chronyd
     state: restarted
-    enabled: true
-    daemon_reload: true
+    enabled: yes
+    daemon_reload: yes

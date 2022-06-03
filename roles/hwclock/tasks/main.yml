@@ -1,24 +1,26 @@
 ---
 - name: remove fake hw clock
   become: yes
-  apt:
+  ansible.builtin.apt:
     name: fake-hwclock
     state: absent
 
 - name: disable fake hwclock update-rc.d
   become: yes
-  command: update-rc.d -f fake-hwclock remove
+  ansible.builtin.command: update-rc.d -f fake-hwclock remove
 
 
 - name: disable fake hwclock service
   become: yes
-  service:
+  ansible.builtin.service:
     enabled: false
     name: fake-hwclock
 
 - name: enable system to read RTC on boot
   become: yes
-  copy:
-    src: files/hwclock-set
+  ansible.builtin.file:
+    src: "{{ software_dir }}/sensor-station-software/system/hwclock/hwclock-set"
     dest: /lib/udev/hwclock-set
+    state: link
+    force: yes
     

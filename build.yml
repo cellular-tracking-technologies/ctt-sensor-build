@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  vars:
+    user: ctt
+    software_dir: /lib/ctt
+    hostname: sensorstation
+  roles:
+    # - init
+    # - bob-dev
+    # - install-node-npm
+    # - install-ctt-software
+    # - hwclock
+    # - gps
+    # - enable-modem
+    # - handle-uart
+    # - chrony
+    # - crypto-chip
+    - configure-ctt-software
+    - wrap-up

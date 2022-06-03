@@ -1,7 +1,7 @@
 ---
 - name: update and upgrade apt packages
   become: true
-  apt:
+  ansible.builtin.apt:
     upgrade: yes
     update_cache: yes
     cache_valid_time: 86400 #One day
@@ -9,7 +9,7 @@
 # station hardware configuration 
 - name: copy boot/config.txt
   become: yes
-  copy:
+  ansible.builtin.copy:
     src: files/config.txt
     dest: /boot/config.txt
 
@@ -28,7 +28,7 @@
 
 - name: reboot before removing unattended upgrades...
   become: yes
-  reboot:
+  ansible.builtin.reboot:
 
 # remove unattended upgrades...
 - name: remove unattended upgrades
@@ -40,34 +40,34 @@
 
 - name: ensure /etc/ctt exists
   become: yes
-  file:
+  ansible.builtin.file:
     path: /etc/ctt
     state: directory
     mode: '0755'
 
 - name: create station image file
   become: yes
-  shell: date -I > /etc/ctt/station-image
+  ansible.builtin.shell: date -I > /etc/ctt/station-image
 
 - name: create station software file
   become: yes
-  shell: date -I > /etc/ctt/station-software
+  ansible.builtin.shell: date -I > /etc/ctt/station-software
 
 - name: copy station hosts on boot
   become: yes
-  template:
+  ansible.builtin.template:
     src: files/hosts
     dest: /etc/hosts
 
 - name: copy hostname
   become: yes
-  copy:
+  ansible.builtin.copy:
     content: "{{hostname}}"
     dest: /etc/hostname
 
 - name: install system packages
   become: true
-  apt: 
+  ansible.builtin.apt: 
     name: "{{ packages }}"
     state: latest
   vars:
@@ -92,11 +92,11 @@
 
 - name: enable i2c access
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/modules
     line: i2c-dev
 
 - name: set timezone
   become: yes
-  shell:
+  ansible.builtin.shell:
     cmd: timedatectl set-timezone America/New_York

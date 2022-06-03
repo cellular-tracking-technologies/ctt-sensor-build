@@ -1,7 +1,7 @@
 ---
 - name: disable hciuart.service for bluetooth modem
   become: yes
-  systemd:
+  ansible.builtin.systemd:
     name: hciuart
     state: stopped
     enabled: no
@@ -9,7 +9,7 @@
 # https://wiki.debian.org/KernelModuleBlacklisting
 - name: blacklist kernel modules
   become: yes
-  copy:
+  ansible.builtin.copy:
     dest: /etc/modprobe.d/blacklist-{{ item }}.conf
     content: "blacklist {{ item }}"
   with_items:
@@ -21,4 +21,4 @@
 
 - name: reboot
   become: yes
-  reboot:
+  ansible.builtin.reboot:

@@ -1,13 +1,13 @@
 ---
 - name: install ppp
   become: yes
-  apt:
+  ansible.builtin.apt:
     name: ppp
     state: latest
 
 - name: create modem rules folder
   become: yes
-  file:
+  ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
     mode: '0755'
@@ -18,36 +18,28 @@
     - { path: '/etc/ctt/scripts' }
     - { path: '/etc/ctt/systemd' }
 
-- name: copy configuration scripts
+- name: link to chatscripts / modem service / modem udev rules
   become: yes
-  copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-  with_items:
-    - { src: 'files/twilio-chatscript', dest: '/etc/chatscripts/twilio'}
-    - { src: 'files/simcom-chat-disconnect', dest: '/etc/chatscripts/disconnect'}
-    - { src: 'files/ppp-gprs', dest: '/etc/ppp/peers/gprs' }
-    - { src: 'files/modem.service', dest: '/etc/ctt/systemd/modem.service'}
-    - { src: 'files/quectel-modem.rules', dest: '/etc/ctt/modem/quectel-modem.rules' }
-
-- name: create link to default quectel modem
-  become: yes
-  file:
+  ansible.builtin.file:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     state: link
+    force: yes
   with_items:
-    - { src: '/etc/ctt/modem/quectel-modem.rules', dest: '/etc/udev/rules.d/23-modem.rules' }
-    - { src: '/etc/ctt/systemd/modem.service', dest: '/etc/systemd/system/modem.service' }
+    - { src: "{{ software_dir }}/sensor-station-software/system/modem/twilio-chatscript", dest: '/etc/chatscripts/twilio'}
+    - { src: "{{ software_dir }}/sensor-station-software/system/modem/simcom-chat-disconnect", dest: '/etc/chatscripts/disconnect'}
+    - { src: "{{ software_dir }}/sensor-station-software/sytem/modem/ppp-gprs", dest: '/etc/ppp/peers/gprs' }
+    - { src: "{{ software_dir }}/sensor-station-software/system/modem/modem.service", dest: '/etc/systemd/system/modem.service'}
+    - { src: "{{ software_dir }}/sensor-station-software/system/modem/quectel-modem.rules", dest: '/etc/udev/rules.d/23-modem.rules' }
 
 - name: reload systemd
   become: yes
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: yes
 
 - name: enable modem conn on boot
   become: yes
-  systemd:
+  ansible.builtin.systemd:
     name: modem.service
     state: started
     enabled: yes

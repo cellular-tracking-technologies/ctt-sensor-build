@@ -1,10 +1,10 @@
 ---
 - name: clean
   become: yes 
-  apt:
+  ansible.builtin.apt:
     autoclean: true
     autoremove: true
 
 - name: reboot
   become: yes 
-  reboot:
+  ansible.builtin.reboot:

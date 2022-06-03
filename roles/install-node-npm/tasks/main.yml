@@ -2,15 +2,15 @@
 #install nvm https://gist.github.com/komuw/b3b5d24977d4df7bd549
 - name: install nvm for node versioning
   become: yes
-  become_user: ctt
-  shell: >
+  become_user: "{{ user }}"
+  ansible.builtin.shell: >
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
     creates=/home/{{ user }}/.nvm/nvm.sh
 
 - name: install node version 12 
   become: yes
-  become_user: ctt
-  shell: >
+  become_user: "{{ user }}"
+  ansible.builtin.shell: >
     /bin/bash -c "source /home/{{ user }}/.nvm/nvm.sh && nvm install 12.22.12 && nvm alias default 12"
     creates=/home/{{ user }}/.nvm/alias 
 
@@ -20,6 +20,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     state: link
+    force: yes
   with_items:
     - { src: '/home/{{ user }}/.nvm/versions/node/v12.22.12/bin/node', dest: '/usr/local/bin/node' }
     - { src: '/home/{{ user }}/.nvm/versions/node/v12.22.12/bin/npm', dest: '/usr/local/bin/npm' }

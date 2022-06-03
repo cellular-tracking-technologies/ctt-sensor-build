@@ -1,7 +1,7 @@
 ---
 - name: install gps software
   become: true
-  apt: 
+  ansible.builtin.apt: 
     name: "{{ packages }}"
     state: latest 
   vars:
@@ -11,14 +11,22 @@
 
 - name: configure gpsd
   become: true
-  copy:
-    src: files/ctt-gpsd.conf
+  ansible.builtin.file:
+    src: "{{ software_dir }}/sensor-station-software/system/gps/ctt-gpsd.conf"
     dest: /etc/default/gpsd
-    backup: true
+    state: link
+    force: yes
 
 # enable gpsd service on start
 - name: enable gpsd systemd
   become: true
-  systemd:
+  ansible.builtin.systemd:
     name: gpsd
     enabled: true
+
+- name: enusure pps-gpio module is loaded at boot
+  become: true
+  ansible.builtin.lineinfile:
+    backup: true
+    path: /etc/modules
+    line: pps-gpio
