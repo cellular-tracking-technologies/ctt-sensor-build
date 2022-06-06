@@ -26,11 +26,19 @@
     state: link
     force: yes
   with_items:
-    - { src: "{{ software_dir }}/sensor-station-software/system/modem/twilio-chatscript", dest: '/etc/chatscripts/twilio'}
-    - { src: "{{ software_dir }}/sensor-station-software/system/modem/simcom-chat-disconnect", dest: '/etc/chatscripts/disconnect'}
-    - { src: "{{ software_dir }}/sensor-station-software/sytem/modem/ppp-gprs", dest: '/etc/ppp/peers/gprs' }
     - { src: "{{ software_dir }}/sensor-station-software/system/modem/modem.service", dest: '/etc/systemd/system/modem.service'}
     - { src: "{{ software_dir }}/sensor-station-software/system/modem/quectel-modem.rules", dest: '/etc/udev/rules.d/23-modem.rules' }
+
+- name: copy chatscripts / ppp config
+  become: yes
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    remote_src: yes
+  with_items:
+    - { src: "{{ software_dir }}/sensor-station-software/system/modem/twilio-chatscript", dest: '/etc/chatscripts/twilio'}
+    - { src: "{{ software_dir }}/sensor-station-software/system/modem/simcom-chat-disconnect", dest: '/etc/chatscripts/disconnect'}
+    - { src: "{{ software_dir }}/sensor-station-software/system/modem/ppp-gprs", dest: '/etc/ppp/peers/gprs' }
 
 - name: reload systemd
   become: yes
