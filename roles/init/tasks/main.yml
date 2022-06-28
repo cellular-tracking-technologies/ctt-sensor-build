@@ -62,7 +62,7 @@
 - name: copy hostname
   become: yes
   ansible.builtin.copy:
-    content: "{{hostname}}"
+    content: "{{ hostname }}"
     dest: /etc/hostname
 
 - name: install system packages
@@ -89,6 +89,10 @@
     - exfat-utils
     - avrdude
     - bmon
+
+- name: configure git
+  become: true
+  ansible.builtin.command: git config --global pull.rebase true
 
 - name: enable i2c access
   become: true
