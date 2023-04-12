@@ -3,7 +3,7 @@
   authorized_key:
     user: "{{ user }}"
     state: present
-    key: "{{ lookup('file', 'files/new-pi.pem.pub') }}"
+    key: "{{ lookup('file', 'files/sensor-station.pem.pub') }}"
 
 - name: install environment packages for bob 
   become: yes
