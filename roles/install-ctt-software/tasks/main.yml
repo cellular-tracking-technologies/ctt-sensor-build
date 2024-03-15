@@ -41,7 +41,7 @@
   become: yes
   become_user: "{{ user }}"
   ansible.builtin.shell:
-    cmd: npm install
+    cmd: npm install --python=python2.7
     chdir: "{{ software_dir }}/sensor-station-software"
 
 - name: ensure bootcount file exists for hardware server check

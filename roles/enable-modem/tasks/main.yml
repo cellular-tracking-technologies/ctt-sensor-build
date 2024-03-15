@@ -52,9 +52,26 @@
     state: started
     enabled: yes
 
-- name: deny wwan0 interface
+- name: deny wwan0 interface by creating disable_wwan0.conf
   become: yes
-  ansible.builtin.lineinfile:
-    path: /etc/dhcpcd.conf
-    regexp: 'denyinterfaces wwan0'
-    line: 'denyinterfaces wwan0'
+  ansible.builtin.copy:
+    dest: /etc/NetworkManager/conf.d/disable_wwan0.conf
+    content: |
+      [main]
+      plugins=ifcfg-rh,keyfile
+
+      [keyfile]
+      unmanaged-devices=interface-name:cdc-wdm0
+
+
+- name: reboot so disabled wwan0 can go into effect
+  become: yes
+  ansible.builtin.reboot:
+
+
+# - name: deny wwan0 interface
+#   become: yes
+#   ansible.builtin.lineinfile:
+#     path: /etc/dhcpcd.conf
+#     regexp: 'denyinterfaces wwan0'
+#     line: 'denyinterfaces wwan0'

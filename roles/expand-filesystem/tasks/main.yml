@@ -1,0 +1,18 @@
+#A1 Expand Filesystem
+---
+    - name: Check if FS is expandable
+      ansible.builtin.shell: "raspi-config nonint get_can_expand"
+      register: fs_filled
+      changed_when: False
+
+    - name: Print if FS is expandable or not
+      debug:
+        msg: "Filesystem is expandable! [{{ fs_filled.stdout }}]"
+      when: fs_filled.stdout == '0'
+
+    - name: Expand Filesystem
+      ansible.builtin.shell: "sudo raspi-config nonint do_expand_rootfs"
+
+    - name: Reboot
+      become: yes
+      ansible.builtin.reboot:

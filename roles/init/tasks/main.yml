@@ -1,4 +1,8 @@
 ---
+# - name: expand filesystem
+#   become: true
+#   ansible.builtin.shell: sudo raspi-config nonint do_expand_rootfs
+
 - name: update and upgrade apt packages
   become: true
   ansible.builtin.apt:
@@ -81,7 +85,7 @@
     - libudev-dev
     - cmake
     - python3-pip
-    - python-dev
+    - python3-dev
     - python3-wheel
     - python3-smbus
     - python3-venv

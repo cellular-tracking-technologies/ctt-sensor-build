@@ -1,9 +1,9 @@
 ---
-- name: copy authorized key (can be deleted on wrap up)
-  authorized_key:
-    user: "{{ user }}"
-    state: present
-    key: "{{ lookup('file', 'files/sensor-station.pem.pub') }}"
+# - name: copy authorized key (can be deleted on wrap up)
+#   authorized_key:
+#     user: "{{ user }}"
+#     state: present
+#     key: "{{ lookup('file', 'files/sensor-station.pem.pub') }}"
 
 - name: install environment packages for bob 
   become: yes

@@ -1,0 +1,44 @@
+---
+- name: install dependencies
+  become: true
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - build-essential
+    - checkinstall
+    - libreadline-gplv2-dev
+    - libncursesw5-dev
+    - libssl-dev
+    - libsqlite3-dev
+    - tk-dev
+    - libgdbm-dev
+    - libc6-dev
+    - libbz2-dev
+  
+- name: download python2.7.2.tgz
+  become: true
+  ansible.builtin.command:
+    chdir: /usr/src
+    cmd: sudo wget https://www.python.org/ftp/python/2.7.2/Python-2.7.2.tgz
+
+- name: unzip tar packages
+  become: true
+  ansible.builtin.command: 
+    chdir: /usr/src
+    cmd: tar xzf Python-2.7.2.tgz
+  # dest: /usr/src
+
+- name: enable optimizations
+  become: true
+  ansible.builtin.command: 
+    chdir: /usr/src/Python-2.7.2
+    cmd: sudo ./configure --enable-optimizations
+
+- name: make altinstall
+  become: true
+  ansible.builtin.command:
+    chdir: /usr/src/Python-2.7.2
+    cmd: sudo make altinstall
+  # dest: Python-2.7.2
+
